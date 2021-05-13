@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Team {
     private ArrayList<Person> members = new ArrayList<>();
@@ -51,6 +52,21 @@ public class Team {
             if(p.avoids(toAdd))
                 return false;
             if(toAdd.avoids(p))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean equals(Team o) {
+        //if this team has the same members as another team
+        for(Person thisPerson : members){
+            //does this person exist in the other team?
+            boolean hasMatch = false;
+            for(Person otherPerson : o.members){
+                if(thisPerson == otherPerson)
+                    hasMatch = true;
+            }
+            if(!hasMatch)
                 return false;
         }
         return true;

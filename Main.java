@@ -14,7 +14,6 @@ public class Main {
     private static Random rand = new Random();
 
     public static void main(String [] args){
-
         File f = new File("./src/team_preferences.txt");
 
         try {
@@ -33,50 +32,61 @@ public class Main {
 
                 String [] names = line.split(",");
 
-                Person thisPerson = getPersonByName(names[0]);
+                Person thisPerson = getPersonByName(sanitizeString(names[0]));
 
                 //for each person, add their preferences
                 for(int i = 1; i < names.length; i++){
-                    String thisName = names[i];
+                    String thisName = sanitizeString(names[i]);
                     if(thisName.charAt(0) == '-'){
                         thisName = thisName.substring(1);
                         thisPerson.avoid(thisName);
                     }else{
                         thisPerson.addPreference(thisName);
                     }
-
                 }
-
-
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
+        //show the people for this file
         for(Person p : nameHash.values()){
             System.out.println(p);
         }
 
-        //calc teams
+        //calc num of teams based on people count and max number in a team
         numOfTeams = (nameHash.size()/maxTeamSize)+1;
-        System.out.println(numOfTeams);
-
+        System.out.println("There are " + nameHash.size() + " people in " + numOfTeams + " teams.");
 
         for (int i = 0; i < TOTAL_RUNS; i++) {
+            boolean success = true;
             switch (ALGORITHM_USED){
                 case 0:
-                    roundRobinAlgorithm();
+                    success = roundRobinAlgorithm();
                     break;
                 case 1:
                     randomAssignmentAlgorithm();
                     break;
             }
-            addTeamsToBestTeams();
+            if (success)
+                addTeamsToBestTeams();
         }
 
+        //print the resulting best teams
         for (int i = 0; i < RETURN_RESULTS; i++) {
             printTeams(bestTeams.get(i));
         }
+    }
+
+    private static String sanitizeString(String s){
+        s = s.toLowerCase();
+        while(s.charAt(0) == ' '){
+            s = s.substring(1,s.length()-1);
+        }
+        while(s.charAt(s.length()-1) == ' '){
+            s = s.substring(0,s.length()-2);
+        }
+        return s;
     }
 
     private static void addTeamsToBestTeams() {
@@ -85,6 +95,12 @@ public class Main {
             teamCopy.add(t);
         }
         int newTeamScore = getTeamsScore(teams);
+
+        //check that this team isnt any of the other teams
+        for (int i = 0; i < bestTeams.size(); i++) {
+            if (teamSetsEquivalent(teamCopy, bestTeams.get(i)))
+                return; //if it is equivalent to one of the teams, skip it
+        }
 
         if(bestTeams.size() < RETURN_RESULTS){
             bestTeams.add(teamCopy);
@@ -100,8 +116,9 @@ public class Main {
         }
     }
 
-    private static void roundRobinAlgorithm() {
+    private static boolean roundRobinAlgorithm() {
         int currTeamIndex = 0;
+        int stuck = 0;
         ArrayList<Person> people = new ArrayList<Person>(nameHash.values());
         teams = new ArrayList<>();
         for (int i = 0; i < numOfTeams; i++) {
@@ -133,11 +150,15 @@ public class Main {
                 Person selectedPerson = bestPeople.get(rand.nextInt(bestPeople.size()));
                 currTeam.addMember(selectedPerson);
                 people.remove(selectedPerson);
+            }else{
+                if(++stuck > numOfTeams)
+                    return false;
             }
 
             //go to the next team, looping around round robin style
             currTeamIndex = (currTeamIndex+1)%numOfTeams;
         }
+        return true;
     }
 
     private static void randomAssignmentAlgorithm() {
@@ -184,5 +205,23 @@ public class Main {
             totalScore += t.getScore();
         }
         return totalScore;
+    }
+
+    public static boolean teamSetsEquivalent(ArrayList<Team> t1, ArrayList<Team> t2){
+        //for each team
+
+        for(Team teamCheck : t1){
+            //each team must equal some other team
+            boolean hasMatch = false;
+            for(Team teamOther : t2){
+                if (teamCheck.equals(t2)){
+                    hasMatch = true;
+                    break;
+                }
+            }
+            if(!hasMatch)
+                return false;
+        }
+        return true;
     }
 }
