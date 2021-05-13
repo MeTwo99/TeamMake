@@ -1,0 +1,20 @@
+3
+alex,emma w,sam C,morgan,-jason
+jasmine,josiah,brenden,delaney,sam C
+cami m,brenden,sam C,jacob,hudson
+brenden,jason,victoria,leslie,spencer,sam C
+jason,harrison,connor,sam C,cami h
+victoria,connor,harrison,hudson,sammy
+harrison,josiah,connor,cami m,alex
+connor,morgan,delaney,cami m,victoria
+morgan,jason,victoria,leslie,spencer
+emma w,morgan,victoria,leslie,cami h
+delaney,sam C,victoria,jasmine,hudson
+sam C,jacob,leslie,jasmine,-brenden
+jacob,leslie,spencer,harrison,brenden
+hudson,brenden,cami h,victoria,harrison
+leslie,jason,harrison,morgan,emma w
+sammy,-brenden
+josiah,brenden,cami h,emma w
+cami h,jasmine,brenden,connor
+spencer,victoria,morgan
