@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 public class Person {
 
-    private String name;
-    private ArrayList<Person> preferences = new ArrayList<>();
-    private ArrayList<Person> avoid = new ArrayList<>();
+    private final String name;
+    private final ArrayList<Person> preferences = new ArrayList<>();
+    private final ArrayList<Person> avoid = new ArrayList<>();
 
     public Person (String name){
         this.name = name;
@@ -17,13 +17,16 @@ public class Person {
 
     public void addPreference(Person p){
         if (this == p){
-            System.out.println("Warning: " + this + " cannot prefer themself");
+            System.out.println("Warning: " + name + " cannot prefer themself");
             return;
+        }
+        if(avoid.contains(p)){
+            System.out.println("Warning: " + name + " prefers and avoids " + p.getName());
         }
         if(!prefers(p))
             preferences.add(p);
         else
-            System.out.println("Warning: " + this + " already prefers " + p.getName());
+            System.out.println("Warning: " + name + " already prefers " + p.getName());
     }
 
     public String getName() {
@@ -32,11 +35,6 @@ public class Person {
 
     public boolean prefers(Person p){
         return preferences.contains(p);
-    }
-
-    public boolean prefers(String name){
-        Person p = Main.getPersonByName(name);
-        return prefers(p);
     }
 
     @Override
@@ -62,6 +60,17 @@ public class Person {
 
     public void avoid(String thisName) {
         Person p = Main.getPersonByName(thisName);
+        if(p == this){
+            System.out.println("Warning: " + name + " cannot avoid themselves as a team member");
+            return;
+        }
+        if(preferences.contains(p)){
+            System.out.println("Warning: " + name + " prefers and avoids " + p.getName());
+        }
+        if(avoid.contains(p)) {
+            System.out.println("Warning: " + name + " already avoids " + p.getName());
+            return;
+        }
         avoid.add(p);
     }
 

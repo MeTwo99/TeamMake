@@ -1,12 +1,20 @@
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Team {
-    private ArrayList<Person> members = new ArrayList<>();
-    private int teamNumber;
+    private final ArrayList<Person> members = new ArrayList<>();
+    private final int teamNumber;
+    private boolean mutable = true;
 
     public Team(int teamNumber){
         this.teamNumber = teamNumber;
+    }
+
+    public Team(int teamNumber, String[] names) {
+        this.teamNumber = teamNumber;
+        for(String n : names){
+            addMember(Main.getPersonByName(n));
+        }
+        mutable = false;
     }
 
     public int getScoreIfPersonAdded(Person p){
@@ -15,14 +23,22 @@ public class Team {
         removeMember(p);
         return score;
     }
+
     public void addMember(Person p){
+        if(!mutable){
+            System.out.println("Warning: Team " + this + " is not mutable.");
+            return;
+        }
         if (!members.contains(p))
             members.add(p);
     }
 
     public void removeMember(Person p){
-        if (members.contains(p))
-            members.remove(p);
+        if(!mutable){
+            System.out.println("Warning: Team " + this + " is not mutable.");
+            return;
+        }
+        members.remove(p);
     }
 
     public int getScore(){
@@ -63,12 +79,18 @@ public class Team {
             //does this person exist in the other team?
             boolean hasMatch = false;
             for(Person otherPerson : o.members){
-                if(thisPerson == otherPerson)
+                if(thisPerson == otherPerson){
                     hasMatch = true;
+                    break;
+                }
             }
             if(!hasMatch)
                 return false;
         }
         return true;
+    }
+
+    public ArrayList<Person> getPeople() {
+        return members;
     }
 }

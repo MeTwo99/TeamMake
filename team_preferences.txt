@@ -9,12 +9,14 @@ harrison,josiah,connor,cami m,alex
 connor,morgan,delaney,cami m,victoria
 morgan,jason,victoria,leslie,spencer
 emma w,morgan,victoria,leslie,cami h
-delaney,sam C,victoria,jasmine,hudson
-sam C,jacob,leslie,jasmine,-brenden
+delaney,sam C,victoria,jasmine,hudson,-brenden
 jacob,leslie,spencer,harrison,brenden
-hudson,brenden,cami h,victoria,harrison
+hudson,cami h,victoria,harrison,-brenden
 leslie,jason,harrison,morgan,emma w
 sammy,-brenden
 josiah,brenden,cami h,emma w
 cami h,jasmine,brenden,connor
-spencer,victoria,morgan
+spencer,victoria,morgan,-brenden
+---
+brenden,sam c,morgan
+victoria,jasmine,emma w
